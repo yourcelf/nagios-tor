@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# Adapted from https://github.com/zwiebelfreunde/torcheck
+
 require 'open3'
 
 def check_status(node, retries, timeout)
