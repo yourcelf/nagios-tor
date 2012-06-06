@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+require 'open3'
+
+def check_status(node, retries, timeout)
+  cmdString = "echo \"EOT\\n\" | timeout #{timeout}s openssl s_client -connect " + node
+  retries.times do
+    stdin, stdout, stderr = Open3.popen3(cmdString)
+    return true if stdout.gets != nil
+  end
+  return false
+end
+
+if __FILE__ == $0
+  if ARGV[0] == "--help"
+      puts "
+    check_tor version 0
+    Usage:
+
+        check_tor <address:port> [retries=2] [timeout=1000]
+
+"
+    return
+  end
+      
+  if check_status(ARGV[0], (ARGV[1] or 2), (ARGV[3].to_f/1000 or 1))
+      exit(0)
+  else
+      exit(2)
+  end
+end
